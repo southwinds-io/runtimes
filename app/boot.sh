@@ -12,7 +12,7 @@
 export USER_HOME=$(awk -F":" '{print $6}' /etc/passwd | grep -m1 $(whoami))
 
 # if in debug mode
-if [ -n "${ARTISAN_DEBUG+x}" ]; then
+if [ -n "${ART_DEBUG+x}" ]; then
   printf "RUNTIME DEBUG INFO:"
   printf "===========================================================================\n"
   printf "* home => '%s'\n" "$USER_HOME"
