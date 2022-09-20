@@ -1,0 +1,29 @@
+---
+env:
+  REPO_NAME: quay.io/artisan
+  IMG_NAME: app-run
+  TAG: ubi-minimal
+
+functions:
+  - name: build
+    description: builds the application runtime
+    run:
+      - cp ../boot.sh .
+      - art open artisan
+      - docker pull registry.access.redhat.com/ubi8/ubi-minimal
+      - docker build -t ${REPO_NAME}/${IMG_NAME}:${TAG} --build-arg VERSION=${ARTISAN_REF} .
+      - docker push ${REPO_NAME}/${IMG_NAME}:${TAG}
+      - rm -f boot.sh
+      - rm -f art
+
+  - name: up
+    description: launches the runtime
+    run:
+      - docker rm -f app > dev/null
+      - docker run --name app -d -e ART_PACKAGE_NAME=${ART_PACKAGE_NAME} -p 8080:8080 ${REPO_NAME}/${IMG_NAME}:${TAG}
+
+  - name: debug
+    description: launches the runtime so it can be exec into for debugging purposes
+    run:
+      - docker run --name app -d -t -e ART_PACKAGE_NAME='${ART_PACKAGE_NAME}' -e ARTISAN_DEBUG=1 -p 8080:8080 ${REPO_NAME}/${IMG_NAME}:${TAG} tail -f /dev/null
+...
