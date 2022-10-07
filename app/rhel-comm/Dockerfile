@@ -17,9 +17,10 @@ ENV GID=1000
 LABEL io.southwinds.uri="www.southwinds.io"
 LABEL io.southwinds.author="Southwinds Tech Ltd"
 LABEL io.southwinds.maintainer="admin@southwinds.io"
-LABEL io.southwinds.product="Artisan Application Runtime"
-LABEL io.southwinds.version=$VERSION
+LABEL io.southwinds.product="Artisan Community Application Runtime"
 LABEL io.southwinds.LICENSE="https://www.apache.org/licenses/LICENSE-2.0.html"
+LABEL io.southwinds.build.version=$VERSION
+LABEL io.southwinds.build.time=$TIME
 
 RUN microdnf install shadow-utils.x86_64 -y && \
     microdnf clean all && rm -rf /var/cache/yum && \

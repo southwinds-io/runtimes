@@ -1,0 +1,30 @@
+---
+env:
+  REPO_NAME: quay.io/artisan
+  IMG_NAME: app-run
+  TAG: rhel-ent
+  TIME: $((date +%s))
+
+functions:
+  - name: build
+    description: builds the application runtime
+    run:
+      - cp ../boot.sh .
+      - art open arte
+      - docker pull registry.access.redhat.com/ubi8/ubi-minimal
+      - docker build -t ${REPO_NAME}/${IMG_NAME}:${TAG} --build-arg VERSION=${ARTISAN_REF} --build-arg TIME=${TIME} .
+      - docker push ${REPO_NAME}/${IMG_NAME}:${TAG}
+      - rm -f boot.sh
+      - rm -f art
+
+  - name: up
+    description: launches the runtime
+    run:
+      - bash  -c "docker rm -f app 2>/dev/null"
+      - docker run --name app -d -e ART_PACKAGE_NAME=${ART_PACKAGE_NAME} -p 8080:8080 --mount type=bind,source=${HOME}/.artisan/.ids,target=/.art/.ids ${REPO_NAME}/${IMG_NAME}:${TAG}
+
+  - name: debug
+    description: launches the runtime so it can be exec into for debugging purposes
+    run:
+      - docker run --name app -d -t -e ART_PACKAGE_NAME='${ART_PACKAGE_NAME}' -p 8080:8080 --mount type=bind,source=${HOME}/.artisan/.ids,target=/.art/.ids ${REPO_NAME}/${IMG_NAME}:${TAG} tail -f /dev/null
+...

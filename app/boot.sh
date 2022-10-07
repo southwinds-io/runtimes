@@ -23,6 +23,9 @@ if [ -n "${ART_DEBUG+x}" ]; then
   printf "* root directory =>\n"
   ls -la /
   printf "===========================================================================\n"
+  printf "* environment =>\n"
+  printenv
+  printf "===========================================================================\n"
 fi
 
 # require an application package name
