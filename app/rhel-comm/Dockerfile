@@ -1,5 +1,5 @@
 #
-#  Artisan Application Runtime - Red Hat Universal Base Image minimal
+#  Artisan Community Application Runtime - Red Hat Universal Base Image minimal
 #  ©2018-Present - SouthWinds Tech Ltd - www.southwinds.io
 #  Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
 #
@@ -10,6 +10,7 @@ FROM registry.access.redhat.com/ubi8/ubi-minimal
 
 ARG UNAME=runtime
 ARG VERSION
+ARG TIME
 
 ENV UID=1000
 ENV GID=1000
