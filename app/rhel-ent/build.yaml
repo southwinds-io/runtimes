@@ -6,16 +6,20 @@ env:
   TIME: $((date +%s))
 
 functions:
-  - name: build
+  - name: build-runtime
     description: builds the application runtime
     run:
       - cp ../boot.sh .
-      - art open arte
+      - art run build-linux ../../../arte
+      - cp ../../../arte/bin/linux/amd64/art .
       - docker pull registry.access.redhat.com/ubi8/ubi-minimal
       - docker build -t ${REPO_NAME}/${IMG_NAME}:${TAG} --build-arg VERSION=${ARTISAN_REF} --build-arg TIME=${TIME} .
-      - docker push ${REPO_NAME}/${IMG_NAME}:${TAG}
       - rm -f boot.sh
       - rm -f art
+
+  - name: push-runtime
+    run:
+      - docker push ${REPO_NAME}/${IMG_NAME}:${TAG}
 
   - name: up
     description: launches the runtime
